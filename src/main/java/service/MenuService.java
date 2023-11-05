@@ -4,6 +4,7 @@ import enums.Menu;
 import model.Animal;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -26,8 +27,9 @@ public class MenuService {
         builder.breed(scanner.next());
         System.out.println("color: ");
         builder.color(scanner.next());
-        System.out.println("date of birth: ");
-        builder.birthDate(LocalDate.parse(scanner.next()));
+        System.out.println("date of birth (dd/mm/yyyy): ");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        builder.birthDate(LocalDate.parse(scanner.next(), formatter));
         return builder.build();
     }
 

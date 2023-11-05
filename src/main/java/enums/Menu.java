@@ -4,15 +4,17 @@ import lombok.Getter;
 
 @Getter
 public enum Menu {
-    ADD("Add (A)"),
-    TAKE("Take (T)"),
-    SHOW("Show (S)"),
-    EXIT("Exit (E)");
+    ADD("Add (A)", "a"),
+    TAKE("Take (T)", "t"),
+    SHOW("Show (S)", "s"),
+    EXIT("Exit (E)", "e");
 
     private String action;
+    private String command;
 
-    Menu(String action) {
+    Menu(String action, String command) {
         this.action = action;
+        this.command = command;
     }
 
     @Override
