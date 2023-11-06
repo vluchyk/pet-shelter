@@ -1,6 +1,5 @@
 package service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataService {
-    private List<Animal> animals;
+    private List<Animal> animals = new ArrayList<>();
     private MenuService menuService;
     private ObjectMapper mapper;
     private File shelter;
@@ -29,7 +28,6 @@ public class DataService {
         try {
             if (!shelter.exists()) {
                 shelter.createNewFile();
-                this.animals = new ArrayList<>();
             } else {
                 this.animals = mapper.readValue(shelter, animalsType);
             }
@@ -40,17 +38,30 @@ public class DataService {
         }
     }
 
+    public List<Animal> getAnimals() {
+        return animals;
+    }
+
     public Runnable add() {
         return () -> this.animals.add(menuService.add());
     }
 
     public Runnable take() {
         String name = menuService.take();
+        boolean exist = false;
+        for (Animal animal : animals) {
+            if (animal.getName().equalsIgnoreCase(name)) {
+                exist = true;
+                break;
+            }
+        }
+        if (!exist) System.out.println("There is no " + name + " in the pet.");
         return () -> this.animals.removeIf(animal -> animal.getName().equalsIgnoreCase(name));
     }
 
     public Runnable show() {
         menuService.show();
+        if (this.animals.size() == 0) System.out.println("None.");
         return () -> this.animals.forEach(System.out::println);
     }
 
